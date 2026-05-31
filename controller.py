@@ -2,7 +2,7 @@ import pyautogui
 import time
 import numpy as np
 from collections import deque
-from config import SMOOTHING_FACTOR, GESTURE_COOLDOWN
+from config import SMOOTHING_FACTOR, GESTURE_COOLDOWN, ACTIVE_ZONE_MARGIN
 
 pyautogui.FAILSAFE = True   # Мышь в угол = аварийная остановка
 pyautogui.PAUSE = 0.01      # Минимальная задержка между командами
@@ -28,10 +28,21 @@ class MouseController:
         return int(np.mean(self.smooth_x)), int(np.mean(self.smooth_y))
 
     def _map_to_screen(self, x, y):
-        """Координаты кадра → координаты экрана."""
-        screen_x = int(x * self.screen_w / self.frame_w)
-        screen_y = int(y * self.screen_h / self.frame_h)
-        return screen_x, screen_y
+        """Координаты кадра → координаты экрана с учётом активной зоны.
+
+        ACTIVE_ZONE_MARGIN обрезает края кадра: центральная часть маппится
+        на весь экран, что повышает чувствительность при работе с расстояния.
+        0.0 = весь кадр, 0.20 = центральные 60%.
+        """
+        mx = int(self.frame_w * ACTIVE_ZONE_MARGIN)
+        my = int(self.frame_h * ACTIVE_ZONE_MARGIN)
+        active_w = self.frame_w - 2 * mx
+        active_h = self.frame_h - 2 * my
+        sx = int((x - mx) * self.screen_w / active_w)
+        sy = int((y - my) * self.screen_h / active_h)
+        sx = max(0, min(self.screen_w - 1, sx))
+        sy = max(0, min(self.screen_h - 1, sy))
+        return sx, sy
 
     def _cooldown_ok(self):
         """Защита от случайных повторных жестов."""

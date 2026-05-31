@@ -5,6 +5,7 @@ import urllib.request
 import mediapipe as mp
 from mediapipe.tasks import python as mp_python
 from mediapipe.tasks.python import vision
+from config import MIN_DETECTION_CONFIDENCE, MIN_TRACKING_CONFIDENCE
 
 MODEL_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "hand_landmarker.task")
 MODEL_URL = (
@@ -48,9 +49,9 @@ class HandTracker:
             base_options=mp_python.BaseOptions(model_asset_path=MODEL_PATH),
             running_mode=vision.RunningMode.VIDEO,
             num_hands=1,
-            min_hand_detection_confidence=0.7,
-            min_hand_presence_confidence=0.7,
-            min_tracking_confidence=0.7,
+            min_hand_detection_confidence=MIN_DETECTION_CONFIDENCE,
+            min_hand_presence_confidence=MIN_DETECTION_CONFIDENCE,
+            min_tracking_confidence=MIN_TRACKING_CONFIDENCE,
         )
         self._landmarker = vision.HandLandmarker.create_from_options(options)
         self._last_ts = -1
