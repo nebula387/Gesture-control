@@ -92,8 +92,8 @@ class HandTracker:
     def fingers_up(self, landmarks, handedness=None):
         """
         Возвращает [большой, указ, средний, безымянный, мизинец], 1=поднят, 0=согнут.
-        handedness — строка из find_hands (MediaPipe на зеркальном кадре).
-        После cv2.flip правая рука определяется как 'Left' → большой палец справа.
+        handedness — строка из find_hands ('Left'/'Right'/None).
+        MediaPipe Tasks API возвращает реальную руку, не зеркальную.
         """
         if not landmarks:
             return []
@@ -102,10 +102,13 @@ class HandTracker:
 
         tip_x = landmarks[self.THUMB_TIP][0]
         mcp_x = landmarks[2][0]  # THUMB_MCP
-        if handedness == "Left":   # правая рука пользователя в зеркале
-            fingers.append(1 if tip_x > mcp_x else 0)
-        else:                      # левая рука пользователя в зеркале
+        # After cv2.flip: left-hand thumb sits on the left (low x), extends further left.
+        # Right-hand thumb sits on the right (high x), extends further right.
+        # MediaPipe Tasks API returns the actual handedness ("Left"/"Right"), not mirrored.
+        if handedness == "Left":
             fingers.append(1 if tip_x < mcp_x else 0)
+        else:
+            fingers.append(1 if tip_x > mcp_x else 0)
 
         tips = [self.INDEX_TIP, self.MIDDLE_TIP, self.RING_TIP, self.PINKY_TIP]
         mcps = [self.INDEX_MCP, self.MIDDLE_MCP, self.RING_MCP, self.PINKY_MCP]

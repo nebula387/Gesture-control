@@ -37,7 +37,8 @@ config.py         — все числовые параметры
 
 - `find_hands()` возвращает **3 значения**: `(frame, landmarks, handedness)`
 - `handedness` — строка `'Left'` / `'Right'` / `None` из MediaPipe
-- После `cv2.flip(frame, 1)` правая рука пользователя → MediaPipe говорит `'Left'`
+- MediaPipe Tasks API возвращает реальную руку пользователя: левая → `'Left'`, правая → `'Right'`
+- После `cv2.flip`: левая рука в зеркале имеет большой палец СЛЕВА (tip_x < mcp_x при отведении)
 - Буфер сглаживания — `collections.deque(maxlen=SMOOTHING_FACTOR)`, не list
 - Модель `hand_landmarker.task` (~8 МБ) скачивается автоматически при первом запуске
 
