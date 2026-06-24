@@ -2,9 +2,7 @@
 
 Управление мышью компьютера с помощью жестов руки через обычную веб-камеру — без дополнительного оборудования.
 
-<video src="Gest-game2.mp4" autoplay loop muted playsinline width="100%"></video>
-
-![Gesture Control in action](gest-screen.jpg)
+<video src="https://github.com/user-attachments/assets/2ed183df-c170-4f91-823b-676ce14e297b" autoplay loop muted playsinline width="100%"></video>
 
 ## Стек
 
