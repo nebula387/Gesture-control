@@ -4,6 +4,8 @@
 
 <video src="https://github.com/user-attachments/assets/2ed183df-c170-4f91-823b-676ce14e297b" autoplay loop muted playsinline width="100%"></video>
 
+*The game:* (https://github.com/nebula387/Gest-game)
+
 ## Стек
 
 | Библиотека | Версия | Роль |
